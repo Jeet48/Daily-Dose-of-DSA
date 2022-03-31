@@ -1,60 +1,133 @@
-#include<iostream>
+#include <iostream>
+#include <cstdlib>
 using namespace std;
+ 
 
-class Queue {
-	int *arr;
-	int f,r,cs,ms;
+#define SIZE 1000
+ 
+
+class Queue
+{
+    int *arr;       
+    int capacity;   
+    int front;      
+    int rear;       
+    int count;      
+ 
 public:
-	Queue(int ds = 5){
-		arr = new int [ds];
-		cs = 0;
-		ms = ds;
-		f = 0;
-		r = ms - 1;
-	}
-	bool full(){
-		return cs == ms;
-	}
-	bool empty(){
-		return cs == 0;
-	}
-	void push(int data){
-		if(!full()){
-			r = (r+1) % ms;
-			arr[r] = data;
-			cs ++;
-		}
-	}
-	void pop() {
-		if(!empty()){
-			f = (f+1) % ms;
-			cs --;
-		}
-	}
-	int front() {
-		return arr[f];
-	}
-    ~Queue() {
-    	if(arr != NULL){
-    		delete [] arr;
-    		arr = NULL;
-    	}
-    }
-
+    Queue(int size = SIZE);     
+    ~Queue();                   
+ 
+    int dequeue();
+    void enqueue(int x);
+    int peek();
+    int size();
+    bool isEmpty();
+    bool isFull();
 };
+ 
 
-int main() {
-	Queue q;
-	for(int i = 1 ;i<=6 ;i++){
-		q.push(i);
-	}
+Queue::Queue(int size)
+{
+    arr = new int[size];
+    capacity = size;
+    front = 0;
+    rear = -1;
+    count = 0;
+}
+ 
+Queue::~Queue() {
+    delete[] arr;
+}
+ 
 
-	q.pop();
-	q.pop();
-	q.push(69);
-	while(!q.empty()){
-		cout<<q.front()<<" ";
-		q.pop();
-	}
-	return 0;
+int Queue::dequeue()
+{
+    
+    if (isEmpty())
+    {
+        cout << "Underflow\nProgram Terminated\n";
+        exit(EXIT_FAILURE);
+    }
+ 
+    int x = arr[front];
+    cout << "Removing " << x << endl;
+ 
+    front = (front + 1) % capacity;
+    count--;
+ 
+    return x;
+}
+ 
+
+void Queue::enqueue(int item)
+{
+    
+    if (isFull())
+    {
+        cout << "Overflow\nProgram Terminated\n";
+        exit(EXIT_FAILURE);
+    }
+ 
+    cout << "Inserting " << item << endl;
+ 
+    rear = (rear + 1) % capacity;
+    arr[rear] = item;
+    count++;
+}
+ 
+
+int Queue::peek()
+{
+    if (isEmpty())
+    {
+        cout << "Underflow\nProgram Terminated\n";
+        exit(EXIT_FAILURE);
+    }
+    return arr[front];
+}
+ 
+
+int Queue::size() {
+    return count;
+}
+ 
+
+bool Queue::isEmpty() {
+    return (size() == 0);
+}
+ 
+
+bool Queue::isFull() {
+    return (size() == capacity);
+}
+ 
+int main()
+{
+    
+    Queue q(5);
+ 
+    q.enqueue(1);
+    q.enqueue(2);
+    q.enqueue(3);
+ 
+    cout << "The front element is " << q.peek() << endl;
+    q.dequeue();
+ 
+    q.enqueue(4);
+ 
+    cout << "The queue size is " << q.size() << endl;
+ 
+    q.dequeue();
+    q.dequeue();
+    q.dequeue();
+ 
+    if (q.isEmpty()) {
+        cout << "The queue is empty\n";
+    }
+    else {
+        cout << "The queue is not empty\n";
+    }
+ 
+    return 0;
 }
