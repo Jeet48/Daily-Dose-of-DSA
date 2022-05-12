@@ -138,7 +138,7 @@ int main()
 
   
 	if (checkStackPermutation(input, output, n))
-		cout << "Yes";
+		cout << "Yes the array is stack permutation of the other";
 	else
 		cout << "Not Possible";
 	return 0;
